@@ -5,7 +5,7 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
-const styleUrl = 'https://ton-serveur/style.xml';
+const styleUrl = 'https://demotiles.maplibre.org/style.json';
 const stylePath = path.join(__dirname, 'style.xml');
 
 mapnik.register_default_fonts();
