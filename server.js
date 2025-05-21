@@ -5,9 +5,6 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
-const styleUrl = 'https://demotiles.maplibre.org/style.json';
-const stylePath = path.join(__dirname, 'style.xml');
-
 mapnik.register_default_fonts();
 mapnik.register_default_input_plugins();
 
@@ -26,21 +23,14 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (!styleLoaded) {
-    try {
-      const response = await axios.get(styleUrl);
-      fs.writeFileSync(stylePath, response.data);
-      map = new mapnik.Map(256, 256);
-      await new Promise((resolve, reject) => {
-        map.load(stylePath, (err, m) => err ? reject(err) : resolve(m));
-      });
-      styleLoaded = true;
-    } catch (err) {
-      res.writeHead(500);
-      res.end('Failed to load style');
-      return;
-    }
-  }
+if (!styleLoaded) {
+  map = new mapnik.Map(256, 256);
+  await new Promise((resolve, reject) => {
+    map.load('style.xml', (err, m) => err ? reject(err) : resolve(m));
+  });
+  styleLoaded = true;
+}
+
 
   const [ , z, x, y ] = match.map(Number);
   map.resize(256, 256);
